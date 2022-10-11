@@ -1,4 +1,4 @@
-#20220911更新日志：在识别后准星移动前进行img_val的截取，用于比对下一循环获取的图片是否和之前重复导致连续移动鼠标两次
+#20221010更新日志：修改输出的图片为possible_model_failure时未被识别出的图片
 import math
 import sys
 import time
@@ -134,12 +134,12 @@ while True:
             print("possible model failure\n")
             save_route = "C:/Users/hhdsj/Desktop/temp/"+str(time.time())
             # cv2.imwrite(save_route,img)
-            imageio.imwrite(save_route+".jpg", img) # 20220919修改 使用新代码使输出为RGB
+            imageio.imwrite(save_route+".jpg", img_unspotted_player) # 20220919修改 使用新代码使输出为RGB
             # 20220919增加 自动生成标签
-            fd = open(save_route+".txt", 'w+')
-            for xyItem in xyList:
-                fd.write("%d %f %f %f %f\n" % (1, (xyItem[2]+(xyItem[4]-xyItem[2])/2)/game_width, (xyItem[3]+(xyItem[5]-xyItem[3])/2)/game_height, (xyItem[4]-xyItem[2])/game_width, (xyItem[5]-xyItem[3])/game_height))
-            fd.close()
+            #fd = open(save_route+".txt", 'w+')
+            #for xyItem in xyList:
+                #fd.write("%d %f %f %f %f\n" % (1, (xyItem[2]+(xyItem[4]-xyItem[2])/2)/game_width, (xyItem[3]+(xyItem[5]-xyItem[3])/2)/game_height, (xyItem[4]-xyItem[2])/game_width, (xyItem[5]-xyItem[3])/game_height))
+            #fd.close() #20221010修改 在修改输出图片为未被识别的图片后标签使用新程序获得
 
         last_status=prev_status
         prev_status=1
@@ -172,3 +172,4 @@ while True:
     else:
         last_status = prev_status
         prev_status=0
+        img_unspotted_player = np.copy(img)    #20221010添加 准备输出图片
