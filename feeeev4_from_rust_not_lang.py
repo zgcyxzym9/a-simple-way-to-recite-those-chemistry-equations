@@ -79,10 +79,16 @@ def CalcCore():
         minCD = min(cdList)
         multiplier = GetMultiplier(minCD)
         if minCD < 300:
-            print("Detactected")
             for cdItem, xyItem in zip(cdList, xyList):
                 if cdItem == minCD:
                     if not(win32api.GetAsyncKeyState(ord('V'))):
+                        CrossHairX = game_width // 2
+                        CrossHairY = game_height // 2
+                        if(CrossHairX < xyItem[4] and CrossHairX > xyItem[2] and CrossHairY < xyItem[5] and CrossHairY > xyItem[3]):   #应该可以说明已经瞄准了
+                            if(not (win32api.GetAsyncKeyState(1))):
+                                win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
+                                win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
+
                         win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, int(multiplier*(xyItem[0] - game_width // 2)),
                                              int(multiplier*(xyItem[1] - game_height // 2)), 0, 0)
         return 1
